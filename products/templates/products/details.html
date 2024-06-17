@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- OFF CANVAS START -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h6 class="offcanvas-title text-uppercase fw-bold d-flex me-5" id="offcanvasCartLabel">My Shopping cart</h6>
+      <a href="{% url 'orders:cart' %}">
+      <span class="small fw-normal justify-content-end ms-4">SEE DETAILS</span></a>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      
+    </div>
+
+
+    <div class="shadow-none p-3 bg-body-tertiary d-flex flex-wrap p-2">
+        <h3> <i class="bi bi-truck"></i></h3>
+        <p class="fw-light text-center">&nbsp;&nbsp; Delivery approx. 1-3 business days</p>
+    </div>
+
+<div id="ajaxrefresh"> <!--The start of ajax append -->
+{% if order.get_cart_items > 0 %}
+    <div class="shadow-none p-3 mb-5 bg-body-secondary d-flex flex-wrap p-2">
+        <h3> <i class="bi bi-check-circle-fill"   style="color:green;"></i></h3>
+        <p class="fw-bold">&nbsp;GOOD CHOICE <br>
+        <span class="small fw-normal">&nbsp;Your item was added to the shopping bag</span> </p> 
+    </div>
+{% else  %}
+    <div class="shadow-none p-3 mb-5 bg-body-tertiary d-flex flex-wrap p-2">
+        <h3> <i class="bi bi-bag-x-fill"   style="color: black;"></i></h3>
+        <p class="fw-bold">&nbsp;SHOP TO ADD ITEMS <br>
+        <span class="small fw-normal">&nbsp;Your shopping bag is currently empty</span> </p> 
+    </div>
+{% endif %}
+
+    <div class="offcanvas-body">
+        <div class="container">
+            {% for item in items %}
+            <div class="row">
+                <hr>
+                <div class="col-6">
+                    <div class="card">
+                        <img src="{{ item.product.image_url }}" alt="image">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h6 class="fw-bold">{{ item.product.name }}</h6>
+                    <p>Color: {{ item.product_variant.color.name }} <br>
+                    Size: {{ item.product_variant.size.name }} </p>
+                    
+
+                          <div class="d-inline-flex border rounded-1 border-black py-1 px-3 text-decoration-none mb-3">
+
+
+                            <i id="myNegative" class="bi bi-dash update-cart px-2" 
+                            data-product={{item.product.id}} data-action="remove"></i>
+                            <span id='updateText{{item.product.id}}'>{{ item.quantity }}</span>
+
+                            <i id="myPositive" class="bi bi-plus update-cart px-2" data-product={{item.product.id}} data-action="add" ></i>
+
+
+                          </div>
+
+
+                          <p class="small fw-lighter float-end" >Unit price: $ {{ item.product.price }}</p>
+                        
+                          <p class="small float-end">Total price: 
+                            <span class="fw-bold" id="updateTotal{{item.product.id}}">$ {{ item.get_total }}</span></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div> <!--The end of ajax append -->
+
+
+        <hr>
+        <p class="fw-bold">Total items <span class="float-end" id="updateGrandTotal">{{ order.get_cart_items }}</span> </p>
+
+        <p class="fw-bold">Grand total <span class="float-end" id="updateGrandTotal">$ {{ order.get_cart_total }}</span> </p>
+
+
+            <div class="shadow-none p-3 mb-5 bg-body-tertiary p-2 align-self-end w-100">
+                <a class="btn btn-outline-dark w-100" href="{% url 'orders:checkout' %}">Checkout</a>
+                <button class="btn btn-dark w-100 mb-2">Checkout </button>
+                <button class="btn btn-outline-dark w-100 mb-2">Checkout </button>
+            </div>
+    </div>
+  </div>
+<!--END OFF CANVAS  -->
+
+
+
+
+<!--Product details  -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <img src="{{ product.image_url }}">
+                <div class="card-img-overlay d-flex justify-content-end">
+                    <div class="icon-circle">
+                        <i class="bi bi-suit-heart"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+
+
+        <div class="col-md-4 mt-3 bg-light">
+            <div class="d-flex mt-3 mb-3">
+                <div class="align-self-end">
+                    <p class="fw-light small"> <a href="{% url 'website:home' %}">Home</a> / <a href="{% url 'products:product' %}">Formal</a> </p>
+                </div>
+
+                <div class="ms-auto p-2">
+                    <img class="img-fluid" src="{% static 'img/Logo.jpg' %}" alt="4May logo" width="130" height="50">
+                </div>
+            </div>
+            <div class="mt-5">
+                <h2 class="fw-bold text-uppercase">{{ product.name }}</h2>
+                <p class="fw-bold mt-3"> $ {{ product.price }} <span class="fw-light small">&nbsp; Price Incl. Tax</span></p>
+            </div>
+
+            <script>
+                $(document).on('change', '#post-size',function(e){
+                    e.preventDefault();
+                    $.ajax({
+                        type:'POST',
+                        url:'{% url "products:ajaxcolor" %}',
+                        data:{
+                            productid:$('#productid').val(),
+                            size:$('#size').val(),
+                            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                            action: 'post'
+                        },
+                        data_type : 'html',
+                        success: function (data) {
+                            console.log("success");
+                            $('#appendHere').html(data.rendered_table);
+                        },
+                        error: function (data) {
+                            alert("Well this happens in tech. Something went wrong. Refresh and try again. " + data);
+                        }
+                    });
+                });
+            </script>
+
+
+
+        <div class="product-btn mb-5">   
+            {% if product.variant == 'Size-Color' %}
+            <div class="size-option">
+                <form method="POST" id="post-size" action="">
+                    <input class="form-control" type="hidden" name="productid" id="productid" aria-label="product id" value="{{ product.id }}">
+
+                    <p class="text-uppercase fw-bold small">Select Size</p>
+                    {% csrf_token %}
+                    <select class="form-select form-select-sm mb-3 text-center w-50"     aria-label="Size" name="size" id="size">
+                        {% for sz in sizes %}
+                        <option {% if variant.size_id == sz.size_id %} selected {% endif %} value="{{ sz.size_id }}">{{ sz.size.name }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            
+
+            <div class="color-option">
+                <form method="post" action="" id="post-color">
+                    <p class="text-uppercase fw-bold">Select Colour</p>
+                    {% csrf_token %}
+                    <div id="appendHere">
+                        <input class="form-control" type="hidden" name="size" id="size" value="{{ size_id }}"> 
+                        <ul>
+                            {% for c in colors %} 
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio"  {% if variant.id == c.id %} checked {% endif %} name="variantid" id="variantid" value="{{variant.id}}" onchange="this.form.submit();">
+                                <label class="form-check-label" for="inlineRadio1" style="color:antiquewhite; background-color: {{ c.color.code }} ">
+                                    &nbsp;{{ c.color.name }}&nbsp;
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </form>  
+            </div>
+
+            {% elif product.variant == 'Size' %}
+
+            <div class="size-option">
+                <form method="POST" id="post-size" action="">
+                    <input class="form-control" type="hidden" name="productid" id="productid" aria-label="product id" value="{{ product.id }}">
+                    <input class="form-control" type="hidden" name="productid" id="variantid" aria-label="variantid" value="{{ variant.id }}">
+
+                    {% csrf_token %}
+                    <select class="form-select mb-3 text-center w-50 form-select-sm"     aria-label="Size">
+                        {% for sz in sizes %}
+                        <option {% if variant.size_id == sz.size_id %} selected {% endif %} value="{{ sz.size_id }}" name="size" id="size">{{ sz.size.name }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            {% elif product.variant == 'Color' %}
+
+            <div class="color-option">
+                <form method="POST" id="post-color">
+                        {% csrf_token %}
+                    <div id="appendHere">
+                        <input class="form-control" type="hidden" name="size" id="size" value="{{ size_id }}"> 
+
+                        <ul>
+                            {% for c in colors %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio"  {% if variant.id == c.id %} checked {% endif %} name="variantid" id="variantid" value="{{variant.id}}" onchange="this.form.submit();">
+                                <label class="form-check-label" for="inlineRadio1" style=" color:antiquewhite; background-color : {{ c.color.code }}" >&nbsp;{{ c.color.name }}&nbsp;</label>
+                            </div>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </form>  
+            </div>
+            {% endif %}
+        </div>
+
+            <p> <span class="fw-light small">&nbsp; Delivery approx. 1 -3 business days </span></p>
+    
+
+            <button id="offcanvas-ajax" class="btn btn-success update-cart w-100" type="button" data-product="{{ product.id }}" data-action="add" data-varianttype="{{ product.variant }}" data-buttonclicked="yes" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                ADD TO CART
+              </button>
+
+
+           
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+<!--Product details  -->
+
+
+{% endblock %}

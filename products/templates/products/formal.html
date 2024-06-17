@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="formalbg-img"></div>
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-6 offset-3 d-flex justify-content-center ">
+            <h1 class="display-6 text-uppercase fw-bold">
+                Men's Formal Outfits</h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row d-flex align-items-lg-stretch">
+        {% for product in products %}
+        <div class="col-md-4 mb-3">
+            <a href="{{ product.get_absolute_url }}">
+            <div class="card">
+
+                <img class="card-img-top" src="{{ product.image_url }}" alt="image">
+                <div class="card-img-overlay">
+                        <div class="float-end icon-circle ">
+                            <i class="bi bi-suit-heart"></i>
+                        </div>
+                    <div class="d-flex align-items-end h-100">
+                        <img class="float-start img-fluid" src="{% static 'img/Logo.jpg' %}" alt="4May logo" width="70" height="40">
+                    </div>
+
+                </div>
+            </div>
+            </a>
+            <h5 class="mt-2">{{ product.name }}</h5>
+            <p class="fw-bold">$ {{ product.price }}</p>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock content %}

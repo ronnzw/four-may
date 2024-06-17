@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Buttons -->
+<div class="bg-img d-flex align-items-center">
+    <div class="container">
+        <a class="btn btn-danger me-3 ms-5" href="{% url 'products:product' %}"><h4 class="text-uppercase fw-bolder">Formal</h4></a>
+        <a class="btn btn-danger me-3 ms-3" href="{% url 'products:casual' %}"><h4 class="text-uppercase fw-bolder">Casual</h4></a>
+    </div>
+</div>
+<!-- end Buttons -->
+
+<!-- Header text -->
+<div class="container mt-5 mb-5">
+   <div class="row justify-content-center">
+    <div class="col-8 offset-2 ">
+       <h4 class="display-3 text-uppercase fw-bold" style="color: #000000">Live the experience</h4>
+    </div>
+   </div>
+</div>
+<!-- End header text -->
+
+
+<!-- Image cards -->
+<div class="container">
+    <!-- Parent -->
+    <div class="row">
+        <div class="col-6 d-flex align-items-stretch">
+            <!-- Child -->
+            <div class="row">
+                <div class="col-6 mb-4">
+                    <div class="card h-100">
+                        <img src="{% static 'img/boss.jpg' %}" class="card-img" alt="...">
+                    </div>
+                </div>
+                <div class="col-6 mb-4">
+                    <div class="card h-100">
+                        <img src="{% static 'img/nice.jpg' %}" class="card-img" alt="...">
+                    </div>
+                </div>
+
+
+                
+
+                <div class="col-6 mb-4">
+                    <div class="card">
+                        <img src="{% static 'img/Mahe.jpg' %}" class="card-img" alt="...">
+                    </div>
+                </div>
+                <div class="col-6 ">
+                    <div class="card">
+                        <img src="{% static 'img/tino.jpg' %}" class="card-img" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 d-flex align-items-stretch ">
+            <div class="card mb-2 w-100" style="background-color: #3f2795;">
+                <div class="card-img-overlay text-light d-flex align-items-center justify-content-center">
+                    <div class="text-lg-start">
+                        <h5 class="card-title fw-bold display-4 d-none d-md-block">Elegance, classy</h5>
+                        <h1 class="card-title fw-bold display-4 mb-3 d-none d-md-block">Designer Clothing</h1>
+                        <p class="card-text mb-3 d-none d-md-block" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">We had the previlledge of dressing top brands from businessman, musicians, footballers, radio/TV presenters and legends from different works of life. We have turned regular man into gentleman in a classy and elegant ways.</p>
+                        <a class="btn btn-outline-light text-uppercase fw-bold" href="{% url 'products:product' %}">Shop now   &nbsp;<i class="bi bi-arrow-right"></i></a>
+                    </div>
+                  </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- End Image cards -->
+{% endblock content %}

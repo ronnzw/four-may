@@ -1,0 +1,55 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg" data-bs-theme="dark" style="background-color: #e33910">
+    <div class="container-fluid">
+      <button class="navbar-toggler me-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        <a class="navbar-brand mx-auto ms-5 " href="#">
+            <img src="{% static 'img/logo.jpg' %}" alt="4May logo" width="200" height="70">
+        </a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto font-arial">
+          <li class="nav-item px-3">
+            <a class="nav-link" aria-current="page" data-category="F" href="{% url 'products:product' %}">All</a>
+          </li>
+          <li class="nav-item px-3">
+            <a class="nav-link" aria-current="page" data-category="F" href="{% url 'products:formal' %}">Formal</a>
+          </li>
+          <li class="nav-item px-3">
+            <a class="nav-link" data-category="C" href="{% url 'products:casual' %}">Casual</a>
+          </li>
+          <li class="nav-item px-3">
+            <a class="nav-link" data-category="SH" href="{% url 'products:shoes' %}">Shoes</a>
+          </li>
+          <li class="nav-item px-3">
+            <a class="nav-link" data-category="S" href="{% url 'products:sports' %}">Sports</a>
+          </li>
+        </ul>
+      </div>
+      <form class="d-flex" role="search">
+        <div class="mx-lg-auto">
+          <i class="bi bi-search text-light px-2"></i>
+          <i class="bi bi-person text-light px-2"></i>
+          <i class="bi bi-bag text-light px-2 position-relative" type="button"  data-bs-toggle="offcanvas"  data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+            <span class="badge small text-bg-light position-absolute top-100 start-75 translate-middle rounded-circle"
+            id="updateCartTotal">{{ order.get_cart_items}}</span>
+          </i>
+          <i class="bi bi-three-dots-vertical text-light px-2"></i>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+  <script type="text/javascript">
+    //Navbar js
+    let currentLocation = location.href;
+    let navBarItem = document.getElementsByClassName('nav-link');
+
+    for(let i = 0; i < navBarItem.length; i++){
+        if(navBarItem[i].href == currentLocation){
+            navBarItem[i].classList.add('active')
+        }
+        
+    }
+  </script>

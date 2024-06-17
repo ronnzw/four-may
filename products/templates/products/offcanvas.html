@@ -1,0 +1,57 @@
+<!-- OFF CANVAS START -->
+
+{% if order.get_cart_items > 0 %}
+    <div class="shadow-none p-3 mb-5 bg-body-secondary d-flex flex-wrap p-2">
+        <h3> <i class="bi bi-check-circle-fill"   style="color:green;"></i></h3>
+        <p class="fw-bold">&nbsp;GOOD CHOICE <br>
+        <span class="small fw-normal">&nbsp;Your item was added to the shopping bag</span> </p> 
+    </div>
+{% else  %}
+    <div class="shadow-none p-3 mb-5 bg-body-tertiary d-flex flex-wrap p-2">
+        <h3> <i class="bi bi-bag-x-fill"   style="color: black;"></i></h3>
+        <p class="fw-bold">&nbsp;SHOP TO ADD ITEMS <br>
+        <span class="small fw-normal">&nbsp;Your shopping bag is currently empty</span> </p> 
+    </div>
+{% endif %}
+
+    <div class="offcanvas-body">
+        <div class="container">
+            {% for item in items %}
+            <div class="row">
+                <hr>
+                <div class="col-6">
+                    <div class="card">
+                        <img src="{{ item.product.image_url }}" alt="image">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h6 class="fw-bold">{{ item.product.name }}</h6>
+                    <p>Color: {{ item.product_variant.color.name }} <br>
+                    Size: {{ item.product_variant.size.name }} </p>
+                    
+
+                          <div class="d-inline-flex border rounded-1 border-black py-1 px-3 text-decoration-none mb-3">
+
+
+                            <i id="myNegative" class="bi bi-dash update-cart px-2" 
+                            data-product={{item.product.id}} data-action="remove"></i>
+                            <span id='updateText{{item.product.id}}'>{{ item.quantity }}</span>
+
+                            <i id="myPositive" class="bi bi-plus update-cart px-2" data-product={{item.product.id}} data-action="add" ></i>
+
+
+                          </div>
+
+
+                          <p class="small fw-lighter float-end" >Unit price: $ {{ item.product.price }}</p>
+                        
+                          <p class="small float-end">Total price: 
+                            <span class="fw-bold" id="updateTotal{{item.product.id}}">$ {{ item.get_total }}</span></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+<!--END OFF CANVAS  -->

@@ -1,0 +1,15 @@
+<input class="form-control" type="hidden" name="size" id="size" value="{{ size_id }}"> 
+
+<ul>
+    {% for c in colors %}
+    <div class="form-check form-check-inline">
+
+        <input class="form-check-input" type="radio"  {% if variant.id == c.id %} checked {% endif %} name="variantid" id="variantid" value="{{ c.id }}" onchange="this.form.submit();" >
+
+            <label class="form-check-label" for="inlineRadio1" style="background-color: {{ c.color.code }} ; color:antiquewhite">
+                &nbsp;{{ c.color.name }}&nbsp;
+
+            </label>
+    </div>
+    {% endfor %}
+</ul>

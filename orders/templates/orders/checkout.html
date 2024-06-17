@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mt-5">
+            <h6 class="fw-bold mb-5">Delivery details</h6>
+            <form action="">
+                {{form | crispy }}
+            </form>
+
+            <form action="" class="mt-5">
+                {{ pickup_form | crispy }}
+            </form>
+        </div>
+
+        
+        <div class="col-md-4 mt-5">
+            <h6 class="fw-bold text-center mb-5"> Order overview </h6>
+            <p class="fw-bold">$ {{ order.get_cart_total }} <a class="float-end" href="{% url 'orders:cart' %}"><i class="bi bi-arrow-left-short"></i> &nbsp;Change order</a> </p>
+            <hr>
+
+
+
+            {% for item in items %}
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="card">
+                            <img src="{{item.product.image_url}}" alt="image">
+                        </div>
+                    </div>
+                
+
+                    <div class="col-md-8">
+                        <h6 class="fw-bold">{{ item.product.name }}</h6>
+                        <p>Color: {{ item.product_variant.color.name }} <br>
+                            Size: {{ item.product_variant.size.name }} <br>
+                            Quantity: {{ item.quantity }}
+                        </p>
+                        
+                        <p class="small fw-lighter float-end"> 
+                            Unit price: $ {{ item.product.price }}
+                        </p>
+                         <br>   
+                        <p class="small float-end">Total price: <span class="fw-bold">$ {{ item.get_total }} </span>
+                        </p>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+                <hr>
+
+
+                <div class="shadow-none p-3 mb-5 bg-body-tertiary p-2 align-self-end w-100">
+                    <p class="small fw-lighter"> 
+                        Delivery approx. 1 - 3 business days 
+                    </p>
+                    <p>Delivery fee: R20</p>
+                    <p>
+                        Your order: <span class="float-end">$ {{order.get_cart_total}}</span> 
+                    </p>
+                </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
