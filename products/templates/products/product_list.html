@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 {% load currency %}
+{% currency_context %}
+{% load wishlist_tags %}
 
 {% block content %}
+<script>
+    function toggleWishList(element) {
+        element.classList.toggle('filled');
+    }
+</script>
 <div class="bg-img"></div>
 
 <div class="container mt-5 mb-5">
@@ -15,27 +22,38 @@
 </div>
 
 
-<div class="container-fluid">
+<div class="container">
     <div class="row d-flex align-items-lg-stretch">
         {% for product in products %}
         <div class="col-md-4 mb-3">
-            <a href="{{ product.get_absolute_url }}">
+            
             <div class="card">
 
                 <img class="card-img-top" src="{{ product.image_url }}" alt="image">
                 <div class="card-img-overlay">
+                    {% if user.is_authenticated %}
                         <div class="float-end icon-circle ">
-                            <i class="bi bi-suit-heart"></i>
+                            <i class="bi bi-suit-heart-fill  wish-icon 
+                                {% if request.user|in_wishlist:product %}
+                                filled
+                                {% endif %}" data-product-id="{{ product.id }}">
+                            </i>
                         </div>
+                    {% endif %}
+
+                    <a href="{{ product.get_absolute_url }}">
+                        <div class="card-overlay fw-smaller">Click to shop</div>
+                    </a>
                     <div class="d-flex align-items-end h-100">
                         <img class="float-start img-fluid" src="{% static 'img/Logo.jpg' %}" alt="4May logo" width="70" height="40">
                     </div>
 
                 </div>
             </div>
-            </a>
-            <h5 class="mt-2">{{ product.name }}</h5>
-            <p class="fw-bold">{{ product.price}}</p>
+            
+            <h5 class="mt-2">{{ product.name }} </h5>
+            <p class="fw-bold">{{ product.price|currency:request.session.currency }} {{ request.session.currency }}</p>
+            
         </div>
     {% endfor %}
     </div>

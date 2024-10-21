@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load currency %}
 {% block content %}
 <div class="container">
 
-    <h1 class="display-6 fw-bold text-uppercase text-center mt-5 mb-5">My Shopping cart</h1>
+    <h1 class="display-6 fw-bold text-uppercase text-center mt-5 mb-5"> My Shopping cart</h1>
+
+    <a href="{% url 'products:product' %}" class="btn btn-outline-primary mt-2 mb-3" ><i class="bi bi-arrow-left"></i> &nbsp;CONTINUE SHOPPING</a>
+    <a href="{% url 'orders:checkout' %}" class="btn btn-outline-success mt-2 mb-3 float-end" >PROCEED TO CHECKOUT&nbsp;<i class="bi bi-arrow-right"></i></a>
 
     {% for item in items %}
     <div class="row">
@@ -19,6 +22,7 @@
                     <h6 class="fw-bold text-uppercase">{{ item.product.name }}</h6>
                     <p>Color: {{ item.product_variant.color.name }}</p>
                     <p>Size: {{ item.product_variant.size.name }}</p>
+                    <!--<p>VARIANT ID: {{ item.product_variant.id }}</p>-->
 
                     <!--For data passing to JS -->
                     <input type="hidden" id="size" value="{{ item.product_variant.id }}">
@@ -31,16 +35,17 @@
                     <div class="d-inline-flex border rounded-1 border-black py-1 px-3 text-decoration-none mb-3">
 
                         <i id="myNegative" class="bi bi-dash update-cart px-2" 
-                        data-product={{item.product.id}} data-action="remove" data-varianttype={{ item.product.variant }} ></i>
-                        <span id='updateText{{item.product.id}}'>{{ item.quantity }}</span>
+                        data-product="{{item.product.id}}" data-action="remove" data-variantId="{{ item.product_variant.id }}" ></i>
 
-                        <i id="myPositive" class="bi bi-plus update-cart px-2" data-product={{item.product.id}} data-action="add" data-varianttype={{ item.product.variant }} ></i>
+                        <span id='{{ item.product_variant.id }}updateText{{item.product.id}}'>{{ item.quantity }}</span>
+
+                        <i id="myPositive" class="bi bi-plus update-cart px-2" data-product="{{item.product.id}}" data-action="add" data-variantId="{{ item.product_variant.id }}" ></i>
                     </div>
 
-                    <p class="small fw-lighter float-end" >Unit price: $ {{ item.product.price }}</p><br>
+                    <p class="small fw-lighter float-end" >Unit price: {{ item.product.price|currency:request.session.currency }} {{ request.session.currency }}</p><br>
                         
                     <p class="small float-end">Total price: 
-                        <span class="fw-bold" id="updateTotal{{item.product.id}}">$ {{ item.get_total }}</span></p>
+                        <span class="fw-bold" id="{{ item.product_variant.id }}updateTotal{{item.product.id}}"> {{ item.get_total|currency:request.session.currency }} {{ request.session.currency }} </span></p>
                 </div>
             </div>
         </div>
@@ -51,7 +56,7 @@
                     <p class="fw-bold">Cart item(s) total <span class="float-end" id="updateCartTotal">{{ order.get_cart_items}}</span> </p>
                   <p>DPD</p>
                   <p><i class="bi bi-truck"></i>&nbsp; <span class="small text-normal">Delivery approx is within 1 - 3 business days</span> </p>
-                  <p class="fw-bold">Grand total <span class="float-end" id="updateGrandTotal">$ {{ order.get_cart_total }}</span> </p>
+                  <p class="fw-bold">Grand total <span class="float-end" id="updateGrandTotal"> {{ order.get_cart_total|currency:request.session.currency }} {{ request.session.currency }} </span> </p>
                 </div>
               </div>
               <a class="btn btn-dark text-upppercase w-100 mx-3 mt-4 py-2" href="{% url 'orders:checkout' %}">Checkout</a>

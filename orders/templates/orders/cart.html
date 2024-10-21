@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load currency %}
 {% block content %}
   
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExampleRon" aria-labelledby="offcanvasExampleLabel">
@@ -47,15 +47,15 @@
                           <div class="d-inline-flex border rounded-1 border-black py-1 px-3 text-decoration-none mb-3">
                             <i id="myNegative" class="bi bi-dash"></i> &nbsp; {{ item.quantity }} &nbsp;<i id="myPositive" class="bi bi-plus"></i>
                           </div>
-                          <p class="small fw-lighter float-end" >Unit price: $ {{ item.product.price }}</p>
+                          <p class="small fw-lighter float-end" >Unit price: {{ item.product.price|currency:request.session.currency }} {{ request.session.currency }} </p>
                         
-                    <p class="small float-end">Total price: <span class="fw-bold">$ {{ item.get_total }}</span></p>
+                    <p class="small float-end">Total price: <span class="fw-bold"> {{ item.get_total|currency:request.session.currency }} {{ request.session.currency }} </span></p>
                 </div>
             </div>
             {% endfor %}
         </div>
         <hr>
-        <p>Total price: <span class="float-end">$ {{ order.get_cart_total }}</span> </p>
+        <p>Total price: <span class="float-end"> {{ order.get_cart_total|currency:request.session.currency }} {{ request.session.currency }} </span> </p>
             <div class="shadow-none p-3 mb-5 bg-body-tertiary p-2 align-self-end w-100">
                 <button class="btn btn-dark w-100 mb-2">Checkout </button>
                 <button class="btn btn-outline-dark w-100 mb-2">Checkout </button>

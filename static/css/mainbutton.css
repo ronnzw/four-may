@@ -1,0 +1,24 @@
+.btn-arrow {
+    position: relative;
+    padding-right: 30px; /* Adjust padding to make space for the arrow */
+    transition: padding-right 0.3s;
+}
+
+.btn-arrow .bi-arrow-right {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.btn-arrow:hover {
+    padding-right: 40px;
+    background-color: black;
+    border: none;/* Adjust padding when hovered to show the arrow */
+}
+
+.btn-arrow:hover .bi-arrow-right {
+    opacity: 1;
+}

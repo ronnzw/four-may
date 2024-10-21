@@ -4,6 +4,9 @@ body {
 .navbar-nav .remain {
     flex-direction: row;
 }
+.wish-icon {
+    z-index: 2;
+}
 .bg-img {
     background-image: url('../img/SafariSuitStanding.jpg');
     width: 100vw;
@@ -11,6 +14,10 @@ body {
     background-repeat:no-repeat;
     background-size: cover;
     background-position: top 20% left 50%;
+    transition: transform 0.3s ease;
+}
+.bg-img:hover {
+    transform: scale(1.03);
 }
 .formalbg-img {
     background-image: url('../img/SafariSuit.jpg');
@@ -60,6 +67,10 @@ body {
     object-fit: cover;
     height: 500px; /* Set a fixed height for the images */
 }
+.card-img-wishlist {
+    object-fit: cover;
+    height: 200px; /* Set a fixed height for the images */
+}
 a.nav-link {
     border-color: white;
 }
@@ -67,12 +78,52 @@ a.nav-link {
     cursor: pointer;
     transition: transform 0.3s ease;
 }
-.update-cart:hover {
+i.update-cart:hover {
     color:blueviolet;
     transform: scale(1.8);
 }
 .offcanvas-body {
     max-height: 100vh; /* Full viewport height */
     overflow-y: auto !important;
+}
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.card img {
+    transition: transform 0.3s ease;
+}
+.card:hover img {
+    transform: scale(1.1);
+}
+
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.card:hover .card-overlay {
+    opacity: 1;
+}
+.wish-icon {
+    cursor: pointer;
+    color: #EDEADE !important;
+}
+.wish-icon.filled {
+    color: #e33910 !important;
+
 }
 

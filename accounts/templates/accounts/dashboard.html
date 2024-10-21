@@ -1,0 +1,97 @@
+{% extends "allauth/layouts/manage.html" %}
+{% load allauth %}
+{% block content %}
+    {% element h1 %}
+        Welcome to your dashboard {{ request.user }}
+    {% endelement %}
+    <p>An overview of all your orders, wishlist items and cart items, to view full details just click on the card.</p>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col">
+                <div class="shadow p-3 mb-5 bg-success-subtle rounded">
+                    <h4 class="text-center display-6 fw-bold">Total orders</h4>
+                    <hr>
+                    <h4 class="text-center">{{ orders }}</h4>
+                </div>
+            </div>
+            <div class="col">
+                <div class="shadow p-3 mb-5 bg-primary-subtle rounded">
+                    <h4 class="text-center display-6 fw-bold">Total Wishlist</h4>
+                    <hr>
+                    <h4 class="text-center">{{wishlist_total}}</h4>
+
+                </div>
+            </div>
+            <div class="col">
+                <div class="shadow p-3 mb-5 bg-danger-subtle rounded">
+                    <h4 class="text-center display-6 fw-bold">Cart items</h4>
+                    <hr>
+                    <h4 class="text-center">{{cart_total}}</h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-8 ">
+                <h6 class="display-6 fw-bold mb-4 text-center">
+                    Most recent order
+                </h6>
+                <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">Product name</th>
+                        <th scope="col">Product variant</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                      <tr>
+                        <th scope="row">{{ forloop.counter }}. {{ item.product }}</th>
+                        <td>size:{{item.product_variant.size.name}} | color: {{item.product_variant.color.name}}  </td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.get_total}}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+
+            </div>
+
+
+            <div class="col-4">
+                <h1 class="display-6 fw-bold mb-4 text-center">Order history</h1>
+
+                <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+                    <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">Transaction Id</th>
+                            <th scope="col">Created date</th>
+                            <th scope="col">Completed</th>
+                            <th scope="col">Total price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for order in sys_orders %}
+                          <tr>
+                            <th scope="row"> {{ order.transaction_id }}</th>
+                            <td>{{order.date_ordered}}</td>
+                            <td>{{order.completed}}</td>
+                            <td>{{order.get_cart_total}}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

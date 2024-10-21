@@ -1,4 +1,5 @@
 from .base import *
+from decouple import config
 
 DEBUG = True
 
@@ -10,3 +11,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+EMAIL_BACKEND=config('EMAIL_BACKEND', default='')
+EMAIL_HOST=config('EMAIL_HOST', default='')
+EMAIL_PORT=config('EMAIL_PORT', default='')
+EMAIL_USE_TLS=config('EMAIL_USE_TLS', default='')
+EMAIL_HOST_USER=config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD', default='')

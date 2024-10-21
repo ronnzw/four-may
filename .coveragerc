@@ -1,0 +1,15 @@
+[run]
+omit = 
+    *myvenv/*
+    *tests*
+    *settings/*
+
+[report]
+omit = 
+    *myvenv/*
+    *tests*
+    *settings/*
+    *__init__.py*
+    *__pycache__.py*
+    */tests/*
+    */migrations/*

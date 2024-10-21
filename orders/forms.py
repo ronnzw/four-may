@@ -1,9 +1,9 @@
 from django.forms import ModelForm
-from address.models import ShippingAddress, InstorePickUpPoint
+from address.models import ShippingAddress
 
 class ShippingAddressForm(ModelForm):
     class Meta:
-        fields = ['address', 'city', 'province', 'zipcode']
+        fields = ['mobile_number','alternative_mobile_number','address', 'city', 'province', 'zipcode']
         model = ShippingAddress
 
 

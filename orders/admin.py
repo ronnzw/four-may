@@ -10,7 +10,7 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['transaction_id', 'customer', 'completed','date_ordered']
+    list_display = ['transaction_id', 'customer', 'completed','date_ordered','payment_status']
     inlines = [OrderItemInline]
 
 

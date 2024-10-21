@@ -1,26 +1,54 @@
 {% extends "base.html" %}
 {% load static %}
+{% load currency %}
 {% load crispy_forms_tags %}
 
 {% block content %}
 
 <div class="container">
     <div class="row">
-        <div class="col-md-8 mt-5">
+        {% for msg in messages %}
+        <div {% if msg.tags %} class="alert alert-{{msg.tags}}"{% endif %} role="alert">
+            {{msg}}
+        </div>
+        {% endfor %}
+        <div class="col-md-6 mt-5">
             <h6 class="fw-bold mb-5">Delivery details</h6>
-            <form action="">
-                {{form | crispy }}
-            </form>
-
-            <form action="" class="mt-5">
-                {{ pickup_form | crispy }}
+            <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+                <h6 class="text-center fw-bold">Delivery options</h6>
+                <form method="POST" class="mt-5">
+                    {% csrf_token %}
+                    {{ pickup_form | crispy }}
+                    <input id="pickupButton" class="btn btn-primary mt-2 d-none" type="submit" value="Save">
+                </form>
+                <p class="fst-italics small">Check this box if you want to do an instore pickup</p>
+            </div>
+        
+        <div id="addressSection" class="shadow p-3 mb-5 bg-body-tertiary rounded d-block">
+            <h6 class="text-center fw-bold">Delivery address & contact details</h6>
+            <form method="POST">
+                {% csrf_token %}
+                {{form | crispy}}
+                <input class="btn btn-primary mt-2" type="submit" value="Submit">
             </form>
         </div>
 
+            <div class="shadow-lg p-3 mb-2 bg-body-tertiary rounded mt-5 w-50">
+               <a id="paynowButton" class="btn" href="{% url 'orders:payment' %}"> <img class="img mt-2" src="{% static 'img/button_order_large.svg' %}" alt="orderbutton"></a>
+               <div class="spinner-border text-info d-none float-end" id="loadPaynow" role="status"></div>
+               <p class="small fst-italic">We use secure payment systems</p>
+            </div>
+
+
+
+        </div>
+
+
+
         
-        <div class="col-md-4 mt-5">
+        <div class="col-md-6 mt-5">
             <h6 class="fw-bold text-center mb-5"> Order overview </h6>
-            <p class="fw-bold">$ {{ order.get_cart_total }} <a class="float-end" href="{% url 'orders:cart' %}"><i class="bi bi-arrow-left-short"></i> &nbsp;Change order</a> </p>
+            <p class="fw-bold"> {{ order.get_cart_total|currency:request.session.currency }} {{ request.session.currency }} <a class="float-end" href="{% url 'orders:cart' %}"><i class="bi bi-arrow-left-short"></i> &nbsp;Change order</a> </p>
             <hr>
 
 
@@ -42,10 +70,10 @@
                         </p>
                         
                         <p class="small fw-lighter float-end"> 
-                            Unit price: $ {{ item.product.price }}
+                            Unit price: {{ item.product.price|currency:request.session.currency }} {{ request.session.currency }}
                         </p>
                          <br>   
-                        <p class="small float-end">Total price: <span class="fw-bold">$ {{ item.get_total }} </span>
+                        <p class="small float-end">Total price: <span class="fw-bold"> {{ item.get_total|currency:request.session.currency }} {{ request.session.currency }} </span>
                         </p>
                     </div>
 
@@ -71,6 +99,7 @@
         </div>
     </div>
 </div>
+
 
 
 {% endblock content %}

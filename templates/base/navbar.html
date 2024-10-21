@@ -5,7 +5,7 @@
       <button class="navbar-toggler me-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-        <a class="navbar-brand mx-auto ms-5 " href="#">
+        <a class="navbar-brand mx-auto ms-5 " href="/">
             <img src="{% static 'img/logo.jpg' %}" alt="4May logo" width="200" height="70">
         </a>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -29,17 +29,70 @@
       </div>
       <form class="d-flex" role="search">
         <div class="mx-lg-auto">
-          <i class="bi bi-search text-light px-2"></i>
-          <i class="bi bi-person text-light px-2"></i>
+
+          <i class="bi bi-search text-light px-2 d-none" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover"></i>
+
+          
+
+{% if user.is_authenticated %}<span class="small text-white">Welcome: {{request.user}}</span>{% endif%}
+          <a href="{% url 'accounts:profile' %}"><i class="bi bi-person text-light px-2"></i></a> 
+
           <i class="bi bi-bag text-light px-2 position-relative" type="button"  data-bs-toggle="offcanvas"  data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-            <span class="badge small text-bg-light position-absolute top-100 start-75 translate-middle rounded-circle"
-            id="updateCartTotal">{{ order.get_cart_items}}</span>
+            {% if cart_total != 0 %}
+          <a class="btn" href="{% url 'orders:cart' %}">  <span class="badge small text-bg-light position-absolute top-100 start-50 translate-middle rounded-circle"
+            id="updateCartTotal">{{cart_total}}</span>
+          </a>
+          {% endif %}
           </i>
-          <i class="bi bi-three-dots-vertical text-light px-2"></i>
+
+          <div class="btn-group">
+            <button  class="p-0" style="background-color:#e33910; border:none" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-three-dots-vertical text-light px-2"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'products:wishlist-products' %}">
+                <i class="bi bi-suit-heart"></i>&nbsp; Wish list
+                <span class="float-end">{{wishlist_total}}</span></a> </li>
+              <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">
+                <i class="bi bi-chat-right-quote"></i> &nbsp; Contact us</a></li>
+
+                {% if request.user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'account_logout' %}">
+                <i class="bi bi-power"></i> &nbsp; Logout</a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        
+
         </div>
       </form>
     </div>
   </nav>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header">
+        <h1 class="modal-title text-center fs-5" id="contactModalLabel">Contact us through</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <i class="bi bi-telephone text-center"></i>
+        <p>+26378823934023</p>
+        <hr>
+        <i class="bi bi-whatsapp"></i>
+        <p>+27789843673</p>
+      </div>
+      <div class="modal-footer text-center">
+         <p class="small">Customer service is available from Monday to Friday 09:00 - 17:00</p>
+      </div>
+    </div>
+  </div>
+</div>
 
   <script type="text/javascript">
     //Navbar js

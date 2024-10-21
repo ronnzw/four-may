@@ -1,6 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-from accounts.models import Customer
 from orders.models import Order
 
 
@@ -23,7 +23,7 @@ class ShippingAddress(models.Model):
                               on_delete=models.CASCADE, 
                               blank=True, null=True)
     customer = models.ForeignKey(
-        Customer, 
+        User, 
         on_delete=models.SET_NULL,
         blank=True, null=True
         )
@@ -31,11 +31,13 @@ class ShippingAddress(models.Model):
         Order, 
         on_delete=models.SET_NULL,
         blank=True, null=True)
-    address = models.CharField(max_length=200, null=True)
-    city = models.CharField(max_length=200, null=True)
-    province = models.CharField(max_length=200, null=True)
-    zipcode = models.CharField(max_length=200, null=True)
+    mobile_number = models.CharField(max_length=10, null=True, blank=True)
+    alternative_mobile_number = models.CharField(max_length=10, null=True,blank=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
+    province = models.CharField(max_length=200, blank=True, null=True)
+    zipcode = models.CharField(max_length=200, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f'{self.customer.first_name} {self.customer.last_name}- {self.address}'
+        return f'Delivery address for: {self.customer}'

@@ -1,11 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 
-
-# Create your models here.
 class Category(models.Model):
     CATEGORY_CLASSES = [
         ('F', 'Formal'),
@@ -31,6 +30,7 @@ class Size(models.Model):
 
 
 class Color(models.Model):
+    """All available colors in the system"""
     name = models.CharField(max_length=200, blank=True, null=True)
     code = models.CharField(max_length=7, blank=True, null=True)
 
@@ -45,6 +45,7 @@ class Color(models.Model):
 
 
 class Product(models.Model):
+    """Product has a list of products in our inventory"""
     CATEGORY_CLASSES = [
         ('F', 'Formal'),
         ('C', 'Casual'),
@@ -91,21 +92,20 @@ class Product(models.Model):
 
 
 class ProductVariant(models.Model):
+    """Variant of the product. i.e. Size, Color or both"""
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True, null=True)
-    size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-
-        if self.product.variant == 'Color' and not self.color:
-            default_size, created_size = self.size.objects.get_or_create(name="N") 
-            print(f'If statement: {created_size}')
-            self.size = default_size
-        elif self.product.variant == 'Size' and not self.size:
-            default_color, created_color = self.size.objects.get_or_create(name="N")
-            print(f'Elif statement: {created_color}')
-            self.color = default_color            
-        super().save(*args, **kwargs)          
+    size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)          
 
     def __str__(self):
         return f"{self.product.name}"
+    
+
+class WishList(models.Model):
+    """Items that the users was to buy later"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    added_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name}" 

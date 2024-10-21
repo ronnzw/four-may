@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% load currency %}
+
+{% block content %}
+<div class="container">
+    <h1 class="Display-4 fw-bold text-uppercase mb-5 mt-5 text-center">My Wishlist</h1>
+
+    <a href="{% url 'products:product' %}"> <button class="btn btn-outline-dark mb-5"><i class="bi bi-arrow-left"></i> &nbsp; Back</button></a>
+
+    {% if wishlist_products|length  != 0 %}
+    <h6 class="ms-5">Item(s)</h6>
+    <hr>
+
+    {% for wishitem in wishlist_products %}
+    <div class="row mb-5 d-flex">
+        <div class="col">
+            <img class="card-img-wishlist" src="{{ wishitem.product.image_url }}" alt="image"> 
+        </div>
+        <div class="col">
+            <p class="fw-bold">{{wishitem.product.name}}</p>
+        </div>
+        <div class="col text-center">
+            <p class="small">Unit price</p>
+            <p class="small"> ${{ wishitem.product.price|currency:request.session.currency }} {{ request.session.currency }} </p>
+        </div>
+        <div class="col">
+            <a href="{% url 'products:wishlist-delete' wishitem.product.id %}">
+            <i class="bi bi-x-lg float-end"></i></a>
+            <div class="align-items-center">
+            <a class=" btn btn-dark align-self-center" href="">Add to cart</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <p class="text-center small"> Your don't have any items in your wish list. </p>
+    {% endif %}
+</div>
+{% endblock content %}

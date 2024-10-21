@@ -1,0 +1,9 @@
+{% extends "allauth/layouts/manage.html" %}
+{% load allauth %}
+{% block content %}
+    {% element h1 %}
+        Your Profile
+    {% endelement %}
+    <p>Welcome to your profile {{ request.user }}</p>
+    <p>Use this profile to manage your account you can do account management and do things that are important to you.</p>
+{% endblock content %}
