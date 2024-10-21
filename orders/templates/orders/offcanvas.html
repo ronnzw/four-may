@@ -1,0 +1,40 @@
+{% load static %}
+{% load currency %}
+
+
+<!-- part to put into offcanvas through Ajax  -->
+<div class="container">
+    <h5>OffCanvas adding things</h5>
+    {% for item in items %}
+        <div class="row">
+            <hr>
+            <div class="col-6">
+                <div class="card">
+                    <img src="{{ item.product.image_url }}" alt="image">
+                </div>
+            </div>
+            <div class="col-6">
+                <h6 class="fw-bold">{{ item.product.name }}</h6>
+                <p>Color: {{ item.product_variant.color.name }} <br>
+                Size: {{ item.product_variant.size.name }} </p>
+                
+
+                    <div class="d-inline-flex border rounded-1 border-black py-1 px-3 text-decoration-none mb-3">
+
+
+                        <i id="myNegative" class="bi bi-dash update-cart px-2" 
+                        data-product="{{item.product.id}}" data-action="remove" data-variantId="{{ item.product_variant.id }}" ></i>
+
+                        <span id='{{ item.product_variant.id }}updateText{{item.product.id}}'>{{ item.quantity }}</span>
+
+                        <i id="myPositive" class="bi bi-plus update-cart px-2" data-product="{{item.product.id}}" data-action="add" data-variantId="{{ item.product_variant.id }}" ></i>
+
+
+                    </div>
+
+
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<!--END OFF CANVAS  -->

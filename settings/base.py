@@ -22,6 +22,7 @@ DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',')
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -37,21 +38,25 @@ INSTALLED_APPS = [
 
     # Third party app
     'crispy_forms',
-    "crispy_bootstrap5",
+    "crispy_bootstrap4",
+    'accounts.apps.AccountsConfig',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'currencies',
 
     #own apps
     'website',
-    'accounts',
     'orders',
     'products',
     'cart',
     'address'
 ]
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 
 MIDDLEWARE = [
@@ -63,6 +68,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # Third party
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'officialwebsite.urls'
@@ -78,10 +86,19 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # my own and third parties
+                'orders.context_processors.cart_and_wishlist_total',
                 'currencies.context_processors.currencies',
             ],
         },
     },
+]
+
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'officialwebsite.wsgi.application'
@@ -107,6 +124,21 @@ DATABASES = {
 #        'NAME': BASE_DIR / 'db.sqlite3',
 #    }
 #}
+
+# Email settings
+# EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+#Authentication objects (all auth)
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CHANGE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+
+ACCOUNT_FORMS = {'signup': 'accounts.forms.CustomSignupForm'}
+
 
 
 
@@ -135,11 +167,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Harare'
 
 USE_I18N = True
 
 USE_TZ = True
+
+# Currency
+DEFAULT_CURRENCY = 'USD'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -150,7 +185,7 @@ STATIC_ROOT = 'staticfiles'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type

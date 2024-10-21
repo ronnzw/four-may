@@ -6,37 +6,22 @@ for(let i = 0; i < updateBtn.length; i++){
     updateBtn[i].addEventListener('click', function(){
         let productId = this.dataset.product;
         let action = this.dataset.action;
-        let variantType = this.dataset.varianttype;
-        let variantId = '';
-        let sizeId = '';
+        let variantId = this.dataset.variantid;
+
         if (this.dataset.buttonclicked !== undefined){
             addToCartClicked = this.dataset.buttonclicked;
-            console.log('I was clicked man')
         };
-
-
-
-        if(variantType == 'Size-Color' || variantType == 'Color'){
-            variantId = document.getElementById("variantid").value
-        }else{
-            variantId = document.getElementById("variantid").value
-            sizeId = document.getElementById("size").value
-            console.log(variantId)
-
-        }
 
         if(user === 'AnonymousUser'){
             addCookieItem(productId, action)
         }else{
-            console.log('Running else')
-            userOrder(productId, action, variantId, sizeId)
+            userOrder(productId, action, variantId)
         }
     })
 }
 
 
 function addCookieItem(productId, action){
-    console.log("Not looged...")
 
     if(action == 'add'){
         if(cart[productId] == undefined){
@@ -60,7 +45,7 @@ function addCookieItem(productId, action){
 }
 
 
-function userOrder(productId, action, variantId, sizeId){
+function userOrder(productId, action, variantId){
 
     let url_path = "/orders/update_item"
 
@@ -71,13 +56,11 @@ function userOrder(productId, action, variantId, sizeId){
             'Content-Type' : 'application/json',
             'X-CSRFToken' : csrftoken,
         },        
-        data: JSON.stringify({'productId': productId, 'action': action, 'variantId': variantId, 'sizeId': sizeId}),
+        data: JSON.stringify({'productId': productId, 'action': action, 'variantId': variantId}),
         success: function(data) {
             var received_data = JSON.parse(data);
-            $('ajaxrefresh').html(data.render_ajax);
-            // $('#appendHere').html(data.rendered_table);
-            var itemId = '#updateText' + productId
-            var totalId = '#updateTotal' + productId
+            var itemId = '#' + variantId + 'updateText' + productId
+            var totalId = '#' + variantId + 'updateTotal' + productId
             var grandTotalId = '#updateGrandTotal'
             var cartTotalId = '#updateCartTotal'
             var qnty = received_data.quantity
@@ -86,15 +69,12 @@ function userOrder(productId, action, variantId, sizeId){
                 location.reload()
             } else {
                 $(itemId).text(received_data.quantity);
-                $(totalId).text(received_data.itemTotal);
-                $(grandTotalId).text(received_data.grandTotal);
+                $(totalId).html(received_data.price_with_currency);
+                $(grandTotalId).html(received_data.grand_total_with_currency);
                 $(cartTotalId).text(received_data.cartTotal);
-
-
 
                 if(addToCartClicked == "yes"){
                     ajaxUpdate()
-                    console.log('Running function')
                 }
             }
         },
@@ -106,12 +86,24 @@ function userOrder(productId, action, variantId, sizeId){
 
 function ajaxUpdate(){
         $.ajax({
-            url: "/orders/canvascontent", // Your URL to fetch new content
+            url: "/orders/canvascontent", // Your URL to fetch new context
             type: 'GET',
             success: function(data) {
-                console.log("Yes its working")
-                $('#ajaxrefresh').html(data.render_ajax); // Update the offcanvas content
-                console.log(data.render_ajax)
+                var newData = JSON.parse(data);
+                // Update the offcanvas content
+                $('#ajaxrefresh').html(newData.ajax_render);
+                if(newData !== undefined){
+                    $('#cart-not-empty').removeClass('d-none');
+                    $('#cart-not-empty').addClass('d-block');
+                    $('#cart-is-empty').addClass('d-none');
+                    // document.getElementById('cart-not-empty').style.display = 'block';
+                    //document.getElementById('cart-is-empty').style.display = 'none';
+                } else {
+                    $('#cart-is-empty').addClass('d-block');
+                    $('#cart-not-empty').addClass('d-none');
+                    //document.getElementById('cart-not-empty').style.display = 'none';
+                    //document.getElementById('cart-is-empty').style.display = 'block';
+                }
             },
             error: function(error) {
                 console.log('Error fetching new content:', error);

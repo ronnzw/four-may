@@ -17,7 +17,7 @@ from decouple import config
 # importing whitenoise
 from whitenoise import WhiteNoise
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.local')
+#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.local')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.local' if config('DJANGO_DEBUG', default=False, cast=bool) else 'settings.production')
 
 application = get_wsgi_application()

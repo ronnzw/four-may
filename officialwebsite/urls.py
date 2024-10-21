@@ -22,12 +22,13 @@ from settings import base, local
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('website.urls')),
+    path('accounts/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
     path('cart/', include('cart.urls')),
     path('products/', include('products.urls')),
     path('orders/', include('orders.urls')),
     path('address/', include('address.urls')),
-    path('/currencies/', include('currencies.urls'))
+    path('currencies/', include('currencies.urls'))
 ]
 
 admin.site.site_header = '4May Admnistration Panel'
