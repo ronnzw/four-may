@@ -1,0 +1,1 @@
+.btn-arrow{position:relative;padding-right:30px;transition:padding-right .3s}.btn-arrow .bi-arrow-right{position:absolute;right:10px;top:50%;transform:translateY(-50%);opacity:0;transition:opacity .3s}.btn-arrow:hover{padding-right:40px;background-color:black;border:0;}.btn-arrow:hover .bi-arrow-right{opacity:1}
